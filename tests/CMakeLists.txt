@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.23)
 
-project("AppMT_Tests" VERSION 0.1.0)
+project("AppCoreMT_Tests" VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -15,7 +15,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-file(GLOB CORE "../*.cpp" "../*.hpp")
+file(GLOB CORE "../src/*.cpp" "../src/*.hpp")
 
 add_executable(AppMT_Tests ${CORE})
 
