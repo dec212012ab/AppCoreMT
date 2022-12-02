@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <variant>
 #include <vector>
 
 #include "AppTask.hpp"
@@ -107,18 +108,12 @@ private:
 class TaskChain {
 public:
     TaskChain() = default;
-    std::list<Node::Ptr>::iterator begin() { return chain.begin(); };
-    std::list<Node::Ptr>::iterator end() { return chain.end(); };
 
-    Node::Ptr addTaskNode(TaskNode::Ptr n) { chain.emplace_back(n); return n; };
 
-    void addBranchNode(BranchNode::Ptr n) { chain.emplace_back(n); };
 
-    void addBranchNode(std::initializer_list<Node::Ptr> branches);
     
-
 private:
-    std::list<Node::Ptr> chain;
+    std::list<Node::Ptr> nodes;
 };
 
 
