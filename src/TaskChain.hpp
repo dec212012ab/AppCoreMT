@@ -1,8 +1,11 @@
 #ifndef __TASK_CHAIN_HPP__
 #define __TASK_CHAIN_HPP__
 
+#include <cstdint>
 #include <list>
+#include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <variant>
@@ -16,19 +19,22 @@ public:
     using Ptr = std::shared_ptr<Node>;
     using UPtr = std::unique_ptr<Node>;
     enum class NodeType {
-        Base,
-        Task,
-        Branch
+        Base=1,
+        Task=2,
+        Branch=3
     };
-    Node() :node_type(NodeType::Base) {};
+    Node() :node_type(NodeType::Base),next(nullptr) {};
 
     NodeType getNodeType() { return node_type; };
 
-    Node::Ptr setNextNode(Node::Ptr n) { next = n; return next; };
+    virtual Node::Ptr setNextNode(Node::Ptr n); 
     virtual Node::Ptr getNextNode() { return next; };
     virtual bool call() { return false; };
+    //bool isHeadNode() { return parents.empty(); };
+
 protected:
     NodeType node_type;
+    //std::list<Node*> parents;
     Node::Ptr next;
 };
 
@@ -49,7 +55,6 @@ public:
 
     ~TaskNode() = default;
     operator TaskFn() { return _fn; };
-
     
     template<typename R, typename... Args>
     void setTask(std::shared_ptr<AppTask<R,Args...>> t,R* output, Args&&... args){        
@@ -71,6 +76,12 @@ public:
     std::string getTaskID() { return task_name; };
     void reset();
 
+    Node::Ptr getNextNode()override { return next; };
+    virtual Node::Ptr setNextNode(Node::Ptr n) override {
+        next = n;
+        return std::make_shared<TaskNode>(*this);
+    };
+
 private:
     std::string task_name;
     TaskFn _fn;    
@@ -83,6 +94,13 @@ public:
     BranchNode();
     ~BranchNode() = default;
 
+    static BranchNode::Ptr create(std::function<int(void)> selector_fn, std::vector<Node::Ptr> options) {
+        BranchNode::Ptr b = std::make_shared<BranchNode>();
+        b->setBranchSelector(selector_fn);
+        b->setBranchOptions(options);
+        return b;
+    }
+
     void setBranchSelector(std::function<int(void)> fn) { branch_selector = fn; };
     void setBranchOptions(std::vector<Node::Ptr> opts) { branch_options.clear(); branch_options.swap(opts); };
 
@@ -91,6 +109,10 @@ public:
     bool call() override;
 
     virtual Node::Ptr getNextNode() override;
+    virtual Node::Ptr setNextNode(Node::Ptr n) override {
+        next = n;
+        return std::make_shared<BranchNode>(*this);
+    };
 
     void setRememberLastSelection(bool b) { remember_last_selection = b; };
     bool getRememberLastSelection() { return remember_last_selection; };
@@ -108,12 +130,11 @@ private:
 class TaskChain {
 public:
     TaskChain() = default;
-
-
-
-    
-private:
-    std::list<Node::Ptr> nodes;
+    void addChainSegment(Node::Ptr segment_root, uint8_t priority=100);
+    bool executeChain(bool allow_exceptions, int priority_filter = -1);    
+    std::map<uint8_t, std::list<Node::Ptr>>& getSegments() { return chain_segments; };
+private:    
+    std::map<uint8_t, std::list<Node::Ptr>> chain_segments;
 };
 
 
