@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <thread>
 
+#include "Version.hpp"
+
 class AppCoreMT{
 public:
     AppCoreMT();

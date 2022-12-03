@@ -311,18 +311,17 @@ SCENARIO("TaskChain Build Test", "[TaskChain]"){
 		);
 		b->setRememberLastSelection(false);
 
-		WHEN("Nodes are added") {
-			Node::Ptr head = TaskNode::create<int>(AppTask<int>::create("One", []()->int {return 1; }), &r1);
-			head->setNextNode(
-				TaskNode::create<int, int>(
-					AppTask<int, int>::create("Double", [](int a)->int {std::cout << "DOUBLE:" << 2 * a << std::endl; return 2 * a; }),
-					&r1,
-					std::move(r1)
-				)
-			)->getNextNode()->setNextNode(b);
-			
+		WHEN("Nodes are added") {			
 			t.addChainSegment(
-				head
+				TaskNode::create<int>(AppTask<int>::create("One", []()->int {return 1; }), &r1)
+				->setNextNode(
+					TaskNode::create<int, int>(
+						AppTask<int, int>::create("Double", [](int a)->int {std::cout << "DOUBLE:" << 2 * a << std::endl; return 2 * a; }),
+						&r1,
+						std::move(r1)
+					)
+				->setNextNode(b)
+				)
 			);
 			THEN("All nodes are contained and accessible at priority 100") {
 				REQUIRE((t.getSegments().find(100) != t.getSegments().end()));
