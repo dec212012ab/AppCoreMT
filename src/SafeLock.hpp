@@ -6,6 +6,8 @@
 #include <memory>
 #include <mutex>
 
+namespace AppCore{
+
 class SafeLockTimeoutException : public std::exception{
 public:
 	char* what(){
@@ -30,5 +32,6 @@ private:
 	std::recursive_timed_mutex _internal;
 };
 
+}
 
 #endif

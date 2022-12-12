@@ -1,5 +1,7 @@
 #include "AppWorker.hpp"
 
+using namespace AppCore;
+
 size_t AppWorker::worker_id_gen = 0;
 
 int AppWorker::workerMain()

@@ -13,6 +13,7 @@
 
 #include "AppTask.hpp"
 
+namespace AppCore{
 
 class Node {
 public:
@@ -52,6 +53,13 @@ public:
         task->setTask<R, Args...>(t, output, std::forward<Args>(args)...);
         return task;
     };
+
+    template<typename R, typename... Args>
+    static TaskNode::Ptr create(std::string task_id,std::function<R(Args...)> fn, R* output, Args&&... args){
+        TaskNode::Ptr task = std::make_shared<TaskNode>();
+        task->setTask(AppTask<R,Args...>::create(task_id,fn),output,std::forward<Args>(args)...);
+        return task;
+    }
 
     ~TaskNode() = default;
     operator TaskFn() { return _fn; };
@@ -137,5 +145,5 @@ private:
     std::map<uint8_t, std::list<Node::Ptr>> chain_segments;
 };
 
-
+}
 #endif

@@ -8,6 +8,8 @@
 
 #include "Version.hpp"
 
+namespace AppCore{
+
 class AppCoreMT{
 public:
     AppCoreMT();
@@ -23,4 +25,5 @@ private:
 
 };
 
+}
 #endif

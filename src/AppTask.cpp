@@ -1,6 +1,6 @@
 #include "AppTask.hpp"
 
-
+using namespace AppCore;
 
 #ifdef TESTING
 #include <catch2/catch_test_macros.hpp>

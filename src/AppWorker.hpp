@@ -4,6 +4,8 @@
 #include <functional>
 #include <iostream>
 
+namespace AppCore{
+
 class AppWorker{
 public:
 	AppWorker():worker_id(AppWorker::worker_id_gen++){};
@@ -26,4 +28,6 @@ private:
 	bool signal_stop = false;
 	std::function<int(void)> _main;
 };
+
+}
 #endif

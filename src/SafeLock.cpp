@@ -4,6 +4,8 @@
 #include <catch2/catch_test_macros.hpp>
 #endif
 
+using namespace AppCore;
+
 SafeLock::~SafeLock()
 {
     while(is_locked>0)
