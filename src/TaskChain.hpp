@@ -137,6 +137,7 @@ private:
 
 class TaskChain {
 public:
+    using Ptr = std::shared_ptr<TaskChain>;
     TaskChain() = default;
     void addChainSegment(Node::Ptr segment_root, uint8_t priority=100);
     bool executeChain(bool allow_exceptions, int priority_filter = -1);    

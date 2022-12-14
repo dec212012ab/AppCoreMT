@@ -329,7 +329,7 @@ SCENARIO("TaskChain Build Test", "[TaskChain]"){
 				REQUIRE((t.getSegments().find(100) != t.getSegments().end()));
 				REQUIRE(t.getSegments()[100].size() == 1);
 			}
-			AND_THEN("Executing the chain results with a final output of 24") {
+			AND_THEN("Executing the chain results with a final output of 48") {
 				REQUIRE(t.executeChain(true));
 				REQUIRE(r1 == 48);
 			}
