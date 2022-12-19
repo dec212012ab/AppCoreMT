@@ -15,10 +15,11 @@ endif()
 #AppCoreMT
 configure_file(src/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/Version.hpp)
 
-file(GLOB CORE "./src/*.cpp" "./src/*.hpp")
+file(GLOB CORE "./src/*.cpp" "./src/*.hpp" "./src/interfaces/*")
 
 add_library(objlib OBJECT ${CORE})
 set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(objlib PRIVATE "./src/interfaces")
 
 add_library(AppCoreMT_shared SHARED $<TARGET_OBJECTS:objlib>)
 add_library(AppCoreMT_static STATIC $<TARGET_OBJECTS:objlib>)
@@ -39,6 +40,8 @@ add_executable(AppMT_Tests ${CORE})
 target_compile_definitions(AppMT_Tests PUBLIC 
     -DTESTING
 )
+
+target_include_directories(AppMT_Tests PRIVATE "./src/interfaces")
 
 target_link_libraries(AppMT_Tests PRIVATE Catch2::Catch2WithMain)
 
