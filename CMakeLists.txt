@@ -47,7 +47,7 @@ target_link_libraries(AppMT_Tests PRIVATE Catch2::Catch2WithMain)
 
 #Install command
 
-file(GLOB install_includes "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+file(GLOB install_includes "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces/*.hpp")
 install(
     TARGETS AppCoreMT_static AppCoreMT_shared AppMT_Tests
     RUNTIME DESTINATION $<CONFIG>/bin

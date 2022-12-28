@@ -4,6 +4,8 @@
 #include "TaskChain.hpp"
 #include "Version.hpp"
 
+using namespace AppCore;
+
 int main()
 {
     std::cout<<"AppCoreMT Sample App Version "<<VERSION<<std::endl;
