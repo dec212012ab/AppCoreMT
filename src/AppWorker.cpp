@@ -32,18 +32,20 @@ int AppWorker::workerMain(bool allow_task_exceptions, int task_priority_filter)
                 }
                 else{
                     task_chain_list.lock();
-                    TaskChain t = std::move(task_chain_list.get().front());
+                    TaskChain::Ptr t = std::move(task_chain_list.get().front());
                     task_chain_list.get().pop_front();
                     task_chain_list.unlock();
-                    t.executeChain(allow_task_exceptions,task_priority_filter);
+                    if(!t->executeChain(allow_task_exceptions,task_priority_filter)){
+                        std::cerr<<"Worker: "<<worker_name<<": Task Chain execution returned false!"<<std::endl;
+                    }
                 }
             }
             catch(const std::exception& e){
-                std::cerr<<"Worker "<<worker_id<<": Executing Task Threw Exception!\n"<<e.what()<<std::endl;
+                std::cerr<<"Worker: "<<worker_name<<": Executing Task Threw Exception!\n"<<e.what()<<std::endl;
                 retcode++;
             }
             catch(...){
-                std::cerr<<"Worker "<<worker_id<<": Unknown Exception caught!"<<std::endl;
+                std::cerr<<"Worker: "<<worker_name<<": Unknown Exception caught!"<<std::endl;
                 retcode++;
             }
         }
@@ -54,17 +56,10 @@ int AppWorker::workerMain(bool allow_task_exceptions, int task_priority_filter)
     return retcode;
 }
 
-void AppWorker::enqueueTaskChain(TaskChain&& t)
-{
-    task_chain_list.lock();
-    task_chain_list.get().emplace_back(t);
-    task_chain_list.unlock();
-}
-
 void AppWorker::enqueueTaskChain(TaskChain::Ptr p)
 {
     task_chain_list.lock();
-    task_chain_list.get().emplace_back(*p);
+    task_chain_list.get().emplace_back(p);
     task_chain_list.unlock();
 }
 
