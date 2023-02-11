@@ -13,10 +13,7 @@ endif()
 add_executable(00-TaskChain src/00-TaskChain/main.cpp)
 add_executable(01-DLL_Loader src/01-DLL_Loader/main.cpp)
 add_library(01-DLL SHARED src/../../install/include/IPlugin.hpp src/01-DLL_Loader/dll.cpp)
-
-
-
-#message(${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(02-Multi_Threaded_App src/02-Multi_Threaded_App/main.cpp)
 
 target_include_directories(
     00-TaskChain PUBLIC
@@ -30,6 +27,11 @@ target_include_directories(
 
 target_include_directories(
     01-DLL PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../install/include
+)
+
+target_include_directories(
+    02-Multi_Threaded_App PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../install/include
 )
 
@@ -49,6 +51,15 @@ if(MSVC)
     )
     target_link_libraries(
         01-DLL_Loader PUBLIC
+        AppCoreMT_static.lib
+    )
+
+    target_link_directories(
+        02-Multi_Threaded_App PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/../install/$<CONFIG>/lib
+    )
+    target_link_libraries(
+        02-Multi_Threaded_App PUBLIC
         AppCoreMT_static.lib
     )
 endif()

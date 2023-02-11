@@ -7,6 +7,9 @@
 #include <thread>
 
 #include "AppWorker.hpp"
+#include "DynamicLibLoader.hpp"
+#include "ResourceProvisioner.hpp"
+
 #include "Version.hpp"
 
 namespace AppCore{
@@ -20,19 +23,21 @@ public:
         int task_priority_filter=-1;
     };
 
-    AppCoreMT(size_t max_worker_count=0):max_worker_limit(max_worker_count){};
+    AppCoreMT(size_t max_worker_count=0):max_worker_limit(max_worker_count){
+        shared_resources = ResourceProvisioner::create();
+    };
     ~AppCoreMT()=default;
 
     virtual void run();
     virtual void quit();
 
     bool addWorker();
-    bool addWorker(std::string,bool=true,int=-1);
-    bool endWorker(int);
-    bool endWorker(std::string);
+    bool addWorker(std::string name,bool allow_task_exceptions=true,int task_priority_filter=-1);
+    bool endWorker(int index);
+    bool endWorker(std::string name);
 
-    bool assignWorkerTask(size_t,TaskChain::Ptr);
-    bool assignWorkerTask(std::string,TaskChain::Ptr);
+    bool assignWorkerTask(size_t index,TaskChain::Ptr task);
+    bool assignWorkerTask(std::string name,TaskChain::Ptr task);
     //bool detachWorker();
     
 
@@ -43,10 +48,12 @@ public:
     size_t size(){return workers.size();};
     WorkerObject::Ptr at(size_t index);
     WorkerObject::Ptr at(std::string name);
+    ResourceProvisioner::Ptr getSharedProvisioner(){return shared_resources;};
 
 protected:
     std::deque<WorkerObject::Ptr> workers;
     size_t max_worker_limit;
+    ResourceProvisioner::Ptr shared_resources;
 };
 
 }

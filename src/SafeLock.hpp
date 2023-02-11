@@ -1,6 +1,7 @@
 #ifndef __SAFELOCK_HPP__
 #define __SAFELOCK_HPP__
 
+#include <atomic>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -28,7 +29,7 @@ public:
 #endif
 	operator std::recursive_timed_mutex&(){return _internal;};
 private:
-	int is_locked = 0;
+	std::atomic<int> is_locked = 0;
 	std::recursive_timed_mutex _internal;
 };
 

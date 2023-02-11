@@ -69,7 +69,7 @@ public:
 	}
 
 	template<typename T>
-	std::optional<T*> safeGetAs(bool locking = false, int timeout_ms=-1){
+	std::optional<T*> safeGetPtrAs(bool locking = false, int timeout_ms=-1){
 		try{
 			if(locking){
 				if(timeout_ms<0)var.lock();
@@ -107,8 +107,11 @@ private:
 
 class ResourceProvisioner{
 public:
+	using Ptr = std::shared_ptr<ResourceProvisioner>;
 	ResourceProvisioner()=default;
 	~ResourceProvisioner()=default;
+
+	static ResourceProvisioner::Ptr create(){return std::make_shared<ResourceProvisioner>();};
 
 	template<typename T>
 	bool safeAddSharedResource(std::string thread_id, std::string variable_name, T&& val, bool overwrite=false, size_t timeout_ms=-1){
@@ -121,7 +124,7 @@ public:
 
 	SharedResource::Ptr safeGetSharedResource(std::string thread_id, std::string variable_name, int timeout_ms=-1){
 		if(timeout_ms<0)variable_store.lock();
-		else if(!variable_store.tryLock(timeout_ms))return false;
+		else if(!variable_store.tryLock(timeout_ms))return nullptr;
 		SharedResource::Ptr ret = getSharedResource(thread_id,variable_name);
 		variable_store.unlock();
 		return ret;

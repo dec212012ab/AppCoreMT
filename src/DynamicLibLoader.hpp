@@ -18,6 +18,7 @@ namespace AppCore{
 template<class T>
 class DynamicClass{
 public:
+    using Ptr = std::shared_ptr<DynamicClass<T>>;
     DynamicClass(std::string module_name, std::string allocator_sym = "create", std::string destructor_sym = "destroy")
         :module_name(module_name), allocator_sym(allocator_sym), destructor_sym(destructor_sym)
     {

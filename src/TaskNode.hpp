@@ -28,6 +28,13 @@ public:
         return task;
     }
 
+    template<typename R>
+    static TaskNode::Ptr create(std::string task_id,std::function<R(void)> fn, R* output){
+        TaskNode::Ptr task = std::make_shared<TaskNode>();
+        task->setTask(AppTask<R>::create(task_id,fn),output);
+        return task;
+    }
+
     ~TaskNode() = default;
     operator TaskFn() { return _fn; };
     

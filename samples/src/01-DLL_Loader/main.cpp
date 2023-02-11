@@ -8,9 +8,15 @@
 
 int main()
 {
-    auto loader = std::make_shared<DynamicClass<GenericPlugin>>("./01-DLL.dll");
-
-    GenericPlugin::Ptr greeter = loader->createSharedInstance();
+    DynamicClass<GenericPlugin>::Ptr loader = std::make_shared<DynamicClass<GenericPlugin>>("./01-DLL.dll");
+    GenericPlugin::Ptr greeter;    
+    try{        
+        greeter = loader->createSharedInstance();
+    }
+    catch(const std::exception& e){
+        std::cerr<<"Caught an exception: "<<e.what()<<std::endl;
+        return EXIT_FAILURE;
+    }
     greeter->create();
 
     loader.reset();
