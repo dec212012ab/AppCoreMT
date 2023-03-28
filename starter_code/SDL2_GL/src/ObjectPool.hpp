@@ -91,23 +91,49 @@ public:
             free_spaces.erase(allocated_space);            
             size_t block_index = allocated_space/block_size;
             size_t space_index = allocated_space%block_size;
-            blocks[block_index][space_index] = std::make_unique<T>(item);
+            blocks[block_index][space_index].reset(&item);
             return allocated_space;
         }
         else{
             if(blocks.size()==0 || blocks.back().size()>=block_size){
                 blocks.emplace_back(std::vector<std::unique_ptr<T>>());//Inefficient. Pre-allocate and pass empty slots to free_spaces
             }
-            blocks.back().emplace_back(std::move(std::make_unique<T>(item)));
+            blocks.back().emplace_back(std::unique_ptr<T>());
+            blocks.back().back().reset(&item);
             full_size++;
             return size()-1;            
         }
     }
 
-    virtual size_t addToPool(T&& item)
+    template<typename C = T>
+    size_t addToPool(T&& item)
     {
-        T& ref = item;
-        return addToPool(ref);
+        //Enforce template type checking to ensure convertibility
+        if(!std::is_convertible<C,T>::value){
+            std::stringstream ss;
+            ss<<"Type "<<typeid(C).name()<<" is not convertible from type "<<typeid(T).name()<<"!";
+            std::cerr<<ss.str()<<std::endl;
+            throw std::runtime_error(ss.str());
+        }
+        //NOTE: This version is more for primitives. For classes, 
+        // this overload will likely result in object slicing unless 
+        // the template type C is explicitly provided.
+        if(free_spaces.size()>0){
+            size_t allocated_space = free_spaces.begin()->first;
+            free_spaces.erase(allocated_space);            
+            size_t block_index = allocated_space/block_size;
+            size_t space_index = allocated_space%block_size;            
+            blocks[block_index][space_index] = std::make_unique<C>(dynamic_cast<C&&>(std::move(item)));            
+            return allocated_space;
+        }
+        else{
+            if(blocks.size()==0 || blocks.back().size()>=block_size){
+                blocks.emplace_back(std::vector<std::unique_ptr<T>>());//Inefficient. Pre-allocate and pass empty slots to free_spaces
+            }            
+            blocks.back().emplace_back(std::make_unique<C>(dynamic_cast<C&&>(std::move(item))));            
+            full_size++;
+            return size()-1;            
+        }
     }
 
     virtual size_t addToPool(std::unique_ptr<T> uptr)
@@ -141,6 +167,12 @@ public:
     virtual size_t getValidSize()
     {
         return full_size - free_spaces.size();
+    }
+
+    virtual void clear()
+    {
+        for (auto& b : blocks)
+            b.clear();
     }
 
 protected:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <any>
 #include <vector>
 #include <memory>
 #include <stdexcept>
@@ -84,15 +85,7 @@ public:
         size_t id = component_pool.addToPool(std::move(std::make_unique<T>(std::forward<Args>(args)...)));
         component_pool[id].id = id;
         component_pool[id].pooled = true;
-        try{
-            return dynamic_cast<T&>(component_pool[id]);
-        }
-        catch(const std::bad_cast& e){
-            std::cout<<e.what()<<std::endl;
-            std::cout<<"ComponentBase: "<<getComponentTypeID<ComponentBase>()<<" "<<getComponentTypeID<TransformComponent>()<<std::endl;
-            std::cout << "Typename: " << getComponentTypeName(0)<<" "<<getComponentTypeName(1)<<" "<<getComponentTypeName(2) << std::endl;
-            exit(1);
-        }
+        return dynamic_cast<T&>(component_pool[id]);
     }
 private:
     ComponentFactory()=default;

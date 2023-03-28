@@ -19,6 +19,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "util.hpp"
+
 #define Debug(x){\
             std::cout<<x<<std::endl;\
         }
@@ -26,8 +28,11 @@
 int main(int argc, char** argv)
 {
     //BEGIN TEST REGION
-    AppCoreGui::ObjectPool<size_t> test_pool;
-    std::cout<<"Object Pool [0]: "<<test_pool.addToPool(24)<<":"<<test_pool[0]<<std::endl;
+    AppCoreGui::ObjectPool<AppCoreGui::ComponentBase> test_pool;
+    std::cout<<"Object Pool [0]: "<<test_pool.addToPool<AppCoreGui::TransformComponent>(AppCoreGui::TransformComponent())<<":"<<test_pool[0]<<std::endl;
+    std::cout<<"Typename: "<<AppCoreGui::getComponentTypeName(test_pool[0].getComponentTypeID())<<std::endl;
+    AppCoreGui::TransformComponent& t = dynamic_cast<AppCoreGui::TransformComponent&>(test_pool[0]);
+    test_pool.clear();
 
     AppCoreGui::ComponentBase& base = AppCoreGui::ComponentFactory::create<AppCoreGui::ComponentBase>();
 
@@ -100,7 +105,6 @@ int main(int argc, char** argv)
     std::cout<<"Renderer: "<<glGetString(GL_RENDERER)<<std::endl;
     std::cout<<"Version: "<<glGetString(GL_VERSION)<<std::endl;
 
-    Debug(1);
     SDL_GL_MakeCurrent(window,gl_context);
     SDL_GL_SetSwapInterval(1);
 
@@ -117,11 +121,11 @@ int main(int argc, char** argv)
     float time_value = 0.0f;
     float green_value = 0.0f;
 
-    Debug(2);
     AppCoreGui::RectangleShape r(1,1);
-    Debug(3);
     r.create();
     r.setFillColor("../../resources/Textures/container.jpg");
+
+    std::cout<<"Rect Pos: "<<r.getRootComponent().getPosition()<<std::endl;
 
     while(true){
         if(SDL_PollEvent(&window_event)){
