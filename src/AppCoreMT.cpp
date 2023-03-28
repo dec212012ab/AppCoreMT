@@ -94,6 +94,10 @@ bool AppCoreMT::assignWorkerTask(std::string name, TaskChain::Ptr task)
     return true;
 }
 
+void AppCoreMT::setMaxWorkerLimit(size_t count)
+{
+    max_worker_limit = count;
+}
 
 #ifdef TESTING
 

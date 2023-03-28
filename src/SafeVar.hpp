@@ -6,7 +6,7 @@
 namespace AppCore{
 
 template<typename T>
-class SafeVar{
+class SafeVar : public virtual ILockable{
 public:
 	using Ptr = std::shared_ptr<SafeVar<T>>;
 	using UPtr= std::unique_ptr<SafeVar<T>>;
@@ -39,7 +39,7 @@ public:
 	operator T&() {return _var;};
 	operator T*() {return &_var;};
 
-	void lock() noexcept{_lock.lock();};
+	virtual void lock() noexcept override{_lock.lock();};
 	bool tryLock(size_t timeout_ms = 0){
 		try{
 			_lock.lockTimeout(timeout_ms);
@@ -49,9 +49,12 @@ public:
 			return _lock.isLocked();
 		}
 	};
-	void unlock(){
+	virtual void unlock() override{
 		_lock.unlock();
 	};
+	virtual bool isLocked() override{
+		return _lock.isLocked();
+	}
 
 	T& get(){return _var;};
 	T* getPtr(){return &_var;};
