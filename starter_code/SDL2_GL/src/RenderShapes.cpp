@@ -159,9 +159,11 @@ namespace AppCoreGui{
         color.y = static_cast<float>(fill_color.y)/255.0f;
         color.z = static_cast<float>(fill_color.z)/255.0f;
         glUniform4f(glGetUniformLocation(default_shader.getID(),"color"),color.x,color.y,color.z,1.0f);
-        //glUniform1f(glGetUniformLocation(default_shader.getID(),"use_vertex_colors"),(show_vertex_colors?1.0f:0.0f));
         default_shader.setFloat("use_vertex_colors",(show_vertex_colors?1.0f:0.0f));
         default_shader.setFloat("use_texture",(show_shaded? show_vertex_colors?0.5:1.0f :0.0f));
+        //Set Transform
+        default_shader.setMat4("transform",getRootComponent().getLocalTransformMatrix());
+        
         glBindVertexArray(VAOs[0]);
         glPolygonMode(GL_FRONT_AND_BACK,(wireframe?GL_LINE:GL_FILL));
         if(texture_refresh){

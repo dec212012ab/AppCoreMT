@@ -7,7 +7,7 @@ namespace AppCoreGui{
 
 struct Transform{
 
-    Transform(Vec3f position=Vec3f(0,0,0), Vec3f rotation=Vec3f(0,0,0), Vec3f scale=Vec3f(0,0,0));
+    Transform(Vec3f position=Vec3f(0,0,0), Vec3f rotation=Vec3f(0,0,0), Vec3f scale=Vec3f(1,1,1));
 
     //Local Space Information
     Vec3f position;

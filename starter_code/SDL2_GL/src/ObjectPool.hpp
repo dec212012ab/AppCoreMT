@@ -17,10 +17,12 @@ public:
 
     }
 
-    ObjectPool(size_t pool_block_size)
+    ObjectPool(size_t pool_block_size):
+        block_size(pool_block_size)
     {
 
     }
+    
     virtual ~ObjectPool()
     {
 

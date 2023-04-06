@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <filesystem>
 #include <string>
@@ -31,6 +34,7 @@ public:
     void setBool(const std::string& name, bool value);
     void setInt(const std::string& name, int value);
     void setFloat(const std::string& name, float value);
+    void setMat4(const std::string& name, Mat4f value);
 
     unsigned int getID();
     bool getCompiled();
@@ -51,8 +55,9 @@ private:
         "layout (location=2) in vec2 tex_coord;\n"
         "out vec3 frag_vertex_color;\n"
         "out vec2 frag_tex_coord;\n"
+        "uniform mat4 transform;\n"
         "void main(){\n"
-        "   gl_Position = vec4(vertex_pos,1.0);\n"
+        "   gl_Position = transform * vec4(vertex_pos,1.0);\n"
         "   frag_vertex_color = vertex_color_in;\n"
         "   frag_tex_coord=tex_coord;\n"
         "}";

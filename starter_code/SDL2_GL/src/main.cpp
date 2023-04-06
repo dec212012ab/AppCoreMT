@@ -127,6 +127,7 @@ int main(int argc, char** argv)
 
     std::cout<<"Rect Pos: "<<r.getRootComponent().getPosition()<<std::endl;
 
+    AppCoreGui::Vec3f rotation_axis(0.0f);
     while(true){
         if(SDL_PollEvent(&window_event)){
             if(window_event.type == SDL_QUIT)break;
@@ -136,6 +137,13 @@ int main(int argc, char** argv)
                 if(window_event.key.keysym.sym == SDLK_c)show_vertex_colors = !show_vertex_colors;
                 if(window_event.key.keysym.sym == SDLK_s)show_shaded = !show_shaded;
                 if(window_event.key.keysym.sym == SDLK_t)swap_texture++;
+                if(window_event.key.keysym.sym == SDLK_r){
+                    rotation_axis = AppCoreGui::Vec3f(0,0,0);
+                    r.getRootComponent().setRotation(AppCoreGui::Vec3f(0,0,0));
+                }
+                if(window_event.key.keysym.sym == SDLK_x)rotation_axis = AppCoreGui::Vec3f(glm::radians(5.0f),0,0);
+                if(window_event.key.keysym.sym == SDLK_y)rotation_axis = AppCoreGui::Vec3f(0,glm::radians(5.0f),0);
+                if(window_event.key.keysym.sym == SDLK_z)rotation_axis = AppCoreGui::Vec3f(0,0,glm::radians(5.0f));
             }
             if(window_event.type == SDL_WINDOWEVENT){
                 if(window_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
@@ -159,6 +167,8 @@ int main(int argc, char** argv)
         //Draw Triangle
         time_value += 0.005;
         green_value = (sin(time_value)/2.0f) + 0.5f;
+
+        r.getRootComponent().rotate(rotation_axis);
 
         r.setFillColor(0,255*green_value,0);
         

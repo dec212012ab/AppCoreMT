@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Alias.hpp"
 #include "Component.hpp"
 #include "Transform.hpp"
@@ -8,7 +10,7 @@ namespace AppCoreGui{
 
 class TransformComponent : public virtual ComponentBase{
 public:
-    TransformComponent(Vec3f position=Vec3f(0,0,0), Vec3f rotation=Vec3f(0,0,0), Vec3f scale=Vec3f(0,0,0));
+    TransformComponent(Vec3f position=Vec3f(0,0,0), Vec3f rotation=Vec3f(0,0,0), Vec3f scale=Vec3f(1,1,1));
     
     //Global Space
     Vec3f getPosition();
@@ -23,7 +25,7 @@ public:
     Vec3f scale(Vec3f offset);
 
     //Local Space
-    Vec3f getRelativePosition();
+    /*Vec3f getRelativePosition();
     Vec3f getRelativeRotation();
     Vec3f getRelativeScale();
     void setRelativePosition(Vec3f new_position);
@@ -37,15 +39,15 @@ public:
     //Arbitrary Origins
     Vec3f translateRelativeTo(Vec3f offset, Vec3f origin);
     Vec3f rotateRelativeTo(Vec3f offset, Vec3f origin);
-    Vec3f scaleRelativeTo(Vec3f offset, Vec3f origin);
+    Vec3f scaleRelativeTo(Vec3f offset, Vec3f origin);*/
 
     //Render Specific
-    glm::mat4 getLocalTransformMatrix();
+    glm::mat4 getLocalTransformMatrix();//Object coordinates
 
     
 protected:
     Transform transform;
-
+    Mat4f model_matrix;
 };
 
 };
