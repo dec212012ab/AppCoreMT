@@ -141,6 +141,12 @@ int main(int argc, char** argv)
                     rotation_axis = AppCoreGui::Vec3f(0,0,0);
                     r.getRootComponent().setRotation(AppCoreGui::Vec3f(0,0,0));
                 }
+                if(window_event.key.keysym.sym == SDLK_RIGHT){
+                    r.getRootComponent().translate(AppCoreGui::Vec3f(.1,0,0));
+                }
+                if(window_event.key.keysym.sym == SDLK_LEFT){
+                    r.getRootComponent().translate(AppCoreGui::Vec3f(-.1,0,0));
+                }
                 if(window_event.key.keysym.sym == SDLK_x)rotation_axis = AppCoreGui::Vec3f(glm::radians(5.0f),0,0);
                 if(window_event.key.keysym.sym == SDLK_y)rotation_axis = AppCoreGui::Vec3f(0,glm::radians(5.0f),0);
                 if(window_event.key.keysym.sym == SDLK_z)rotation_axis = AppCoreGui::Vec3f(0,0,glm::radians(5.0f));

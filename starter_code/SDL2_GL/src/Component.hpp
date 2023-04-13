@@ -15,7 +15,7 @@
 
 namespace AppCoreGui{
 
-#define REGISTER_TYPENAME(type_id,name) typename_lut[type_id]=name;
+#define REGISTER_TYPENAME(type_id,name) typename_lut.try_emplace(type_id,name);
 
 class ComponentBase;
 
