@@ -12,6 +12,7 @@ namespace AppCoreGui{
 
     typedef glm::fvec2 Vec2f;
     typedef glm::fvec3 Vec3f;
+    typedef glm::fvec4 Vec4f;
     
     typedef glm::i32vec2 Point2i;
     typedef glm::i32vec3 Point3i;

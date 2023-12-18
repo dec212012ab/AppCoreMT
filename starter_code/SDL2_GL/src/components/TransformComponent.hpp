@@ -21,25 +21,22 @@ public:
     void setScale(Vec3f new_scale);
 
     Vec3f translate(Vec3f offset);
+    Vec3f translate(float x, float y, float z);
+    Vec3f translateX(float x);
+    Vec3f translateY(float y);
+    Vec3f translateZ(float z);
+
     Vec3f rotate(Vec3f offset);
+    Vec3f rotate(float x, float y, float z);
+    Vec3f rotateX(float x);
+    Vec3f rotateY(float y);
+    Vec3f rotateZ(float z);
+
     Vec3f scale(Vec3f offset);
-
-    //Local Space
-    /*Vec3f getRelativePosition();
-    Vec3f getRelativeRotation();
-    Vec3f getRelativeScale();
-    void setRelativePosition(Vec3f new_position);
-    void setRelativeRotation(Vec3f new_position);
-    void setRelativeScale(Vec3f new_position);
-    
-    Vec3f translateLocally(Vec3f offset);
-    Vec3f rotateLocally(Vec3f offset);
-    Vec3f scaleLocally(Vec3f offset);
-
-    //Arbitrary Origins
-    Vec3f translateRelativeTo(Vec3f offset, Vec3f origin);
-    Vec3f rotateRelativeTo(Vec3f offset, Vec3f origin);
-    Vec3f scaleRelativeTo(Vec3f offset, Vec3f origin);*/
+    Vec3f scale(float x, float y, float z);
+    Vec3f scaleX(float x);
+    Vec3f scaleY(float y);
+    Vec3f scaleZ(float z);
 
     //Render Specific
     glm::mat4 getLocalTransformMatrix();//Object coordinates
@@ -47,7 +44,7 @@ public:
     
 protected:
     Transform transform;
-    Mat4f model_matrix;
+    //Mat4f model_matrix;
 };
 
 };

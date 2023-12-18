@@ -8,8 +8,11 @@
 #include "ObjectPool.hpp"
 #include "Component.hpp"
 #include "TransformComponent.hpp"
+#include "Alias.hpp"
 
 namespace AppCoreGui {
+
+//extern Camera global_view;//Default View
 
 class EntityBase;
 
@@ -69,7 +72,7 @@ class DrawableEntity : public virtual EntityBase, public virtual IDrawable{
 public:
     DrawableEntity();
     virtual ~DrawableEntity()=default;
-    virtual void draw(SDL_Window*,SDL_GLContext*) override {};
+    virtual void draw(SDL_Window*,SDL_GLContext*,Mat4f* active_view) override {};
 
     bool getWireframeMode();
     void setWireframeMode(bool b);

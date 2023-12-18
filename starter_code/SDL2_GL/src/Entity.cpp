@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
-
+#include "Camera.hpp"
 
 namespace AppCoreGui{
     size_t registered_entity_types = 0;

@@ -10,7 +10,8 @@
 #include "Alias.hpp"
 #include "Shader.hpp"
 #include "stb_image.h"
-
+#include "util.hpp"
+#include "Camera.hpp"
 
 namespace AppCoreGui{
 
@@ -61,7 +62,7 @@ public:
     void setSize(Point2f size);
 
     virtual void create() override;
-    virtual void draw(SDL_Window* window, SDL_GLContext* ctx) override;
+    virtual void draw(SDL_Window* window, SDL_GLContext* ctx, Mat4f* active_view=nullptr) override;
 
 protected:
     float rect_width;

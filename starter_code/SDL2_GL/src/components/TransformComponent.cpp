@@ -8,121 +8,128 @@ namespace AppCoreGui{
     {
         component_type_id = AppCoreGui::getComponentTypeID<TransformComponent>();
         REGISTER_TYPENAME(getComponentTypeID(), "TransformComponent");
-        model_matrix = Mat4f();
+        //model_matrix = Mat4f();
     }
 
     Vec3f TransformComponent::getPosition()
     {
-        return transform.position;
+        return transform.getPosition();
     }
 
     Vec3f TransformComponent::getRotation()
     {
-        return transform.rotation;
+        return transform.getRotation();
     }
 
     Vec3f TransformComponent::getScale()
     {
-        return transform.scale;
+        return transform.getScale();
     }
 
     void TransformComponent::setPosition(Vec3f new_position)
     {
-        transform.position = new_position;
+        transform.setPosition(new_position);
     }
 
     void TransformComponent::setRotation(Vec3f new_rotation)
     {
-        transform.rotation = new_rotation;
+        transform.setRotation(new_rotation);
     }
 
     void TransformComponent::setScale(Vec3f new_scale)
     {
-        transform.scale = new_scale;
+        transform.setScale(new_scale);
     }
 
     Vec3f TransformComponent::translate(Vec3f offset)
     {
-        transform.position += offset;
-        return transform.position;
+        return transform.translate(offset);
+    }
+
+    Vec3f TransformComponent::translate(float x, float y, float z)
+    {
+        return transform.translate(x,y,z);
+    }
+
+    Vec3f TransformComponent::translateX(float x)
+    {
+        return transform.translateX(x);
+    }
+
+    Vec3f TransformComponent::translateY(float y)
+    {
+        return transform.translateY(y);
+    }
+
+    Vec3f TransformComponent::translateZ(float z)
+    {
+        return transform.translateZ(z);
     }
 
     Vec3f TransformComponent::rotate(Vec3f offset)
     {
-        transform.rotation += offset;
-        return transform.rotation;
+        return transform.rotate(offset);
+    }
+
+    Vec3f TransformComponent::rotate(float x, float y, float z)
+    {
+        return transform.rotate(x,y,z);
+    }
+
+    Vec3f TransformComponent::rotateX(float x)
+    {
+        return transform.rotateX(x);
+    }
+
+    Vec3f TransformComponent::rotateY(float y)
+    {
+        return transform.rotateY(y);
+    }
+
+    Vec3f TransformComponent::rotateZ(float z)
+    {
+        return transform.rotateZ(z);
     }
     
     Vec3f TransformComponent::scale(Vec3f offset)
     {
-        transform.scale += offset;
-        return transform.scale;
+        return transform.scale(offset);
     }
 
-    /*Vec3f TransformComponent::getRelativePosition()
+    Vec3f TransformComponent::scale(float x, float y, float z)
     {
-        return Vec3f();
+        return transform.scale(x,y,z);
     }
-    
-    Vec3f TransformComponent::getRelativeScale()
+
+    Vec3f TransformComponent::scaleX(float x)
     {
-        return Vec3f();
+        return transform.scaleX(x);
     }
-    
-    void TransformComponent::setRelativePosition(Vec3f new_position)
+
+    Vec3f TransformComponent::scaleY(float y)
     {
+        return transform.scaleY(y);
     }
-    
-    void TransformComponent::setRelativeRotation(Vec3f new_position)
+
+    Vec3f TransformComponent::scaleZ(float z)
     {
+        return transform.scaleZ(z);
     }
-    
-    void TransformComponent::setRelativeScale(Vec3f new_position)
-    {
-    }
-    
-    Vec3f TransformComponent::translateLocally(Vec3f offset)
-    {
-        return Vec3f();
-    }
-    
-    Vec3f TransformComponent::rotateLocally(Vec3f offset)
-    {
-        return Vec3f();
-    }
-    
-    Vec3f TransformComponent::scaleLocally(Vec3f offset)
-    {
-        return Vec3f();
-    }
-    
-    Vec3f TransformComponent::translateRelativeTo(Vec3f offset, Vec3f origin)
-    {
-        return Vec3f();
-    }
-    
-    Vec3f TransformComponent::rotateRelativeTo(Vec3f offset, Vec3f origin)
-    {
-        return Vec3f();
-    }
-    
-    Vec3f TransformComponent::scaleRelativeTo(Vec3f offset, Vec3f origin)
-    {
-        return Vec3f();
-    }*/
     
     glm::mat4 TransformComponent::getLocalTransformMatrix()
     {
-        const Mat4f transform_x = glm::rotate(Mat4f(1.0f),glm::radians(transform.rotation.x),Vec3f(1.0f,0.0f,0.0f));
-        const Mat4f transform_y = glm::rotate(Mat4f(1.0f),glm::radians(transform.rotation.y),Vec3f(0.0f,1.0f,0.0f));
-        const Mat4f transform_z = glm::rotate(Mat4f(1.0f),glm::radians(transform.rotation.z),Vec3f(0.0f,0.0f,1.0f));
+        return transform;
+        /*const Mat4f transform_x = glm::rotate(Mat4f(1.0f),glm::radians(transform.getRotation().x),Vec3f(1.0f,0.0f,0.0f));
+        const Mat4f transform_y = glm::rotate(Mat4f(1.0f),glm::radians(transform.getRotation().y),Vec3f(0.0f,1.0f,0.0f));
+        const Mat4f transform_z = glm::rotate(Mat4f(1.0f),glm::radians(transform.getRotation().z),Vec3f(0.0f,0.0f,1.0f));
 
         //Yaw*Pitch*Roll (Euler rotate around z then y then x assuming right hand coordinates)
         const Mat4f rotation_matrix = transform_y * transform_x * transform_z;
 
         //TRS matrix as this is local space
-        return glm::translate(Mat4f(1.0f),transform.position) *
+        return glm::translate(Mat4f(1.0f),transform.getPosition()) *
             rotation_matrix *
-            glm::scale(Mat4f(1.0f),transform.scale);
+            glm::scale(Mat4f(1.0f),transform.getScale());
+        */
     }
 };

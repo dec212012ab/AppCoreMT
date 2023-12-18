@@ -53,11 +53,16 @@ private:
         "layout (location=0) in vec3 vertex_pos;\n"
         "layout (location=1) in vec3 vertex_color_in;\n"
         "layout (location=2) in vec2 tex_coord;\n"
+        
+        "uniform mat4 transform;\n"
+        "uniform mat4 view;\n"
+        "uniform mat4 projection;\n"
+        
         "out vec3 frag_vertex_color;\n"
         "out vec2 frag_tex_coord;\n"
-        "uniform mat4 transform;\n"
+        
         "void main(){\n"
-        "   gl_Position = transform * vec4(vertex_pos,1.0);\n"
+        "   gl_Position = projection * view * transform * vec4(vertex_pos,1.0);\n"
         "   frag_vertex_color = vertex_color_in;\n"
         "   frag_tex_coord=tex_coord;\n"
         "}";

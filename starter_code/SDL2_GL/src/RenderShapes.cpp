@@ -148,7 +148,7 @@ namespace AppCoreGui{
         
     }
 
-    void RectangleShape::draw(SDL_Window* window,SDL_GLContext* ctx)
+    void RectangleShape::draw(SDL_Window* window,SDL_GLContext* ctx, Mat4f* active_view)
     {
         SDL_GL_MakeCurrent(window,*ctx);
 
@@ -161,8 +161,24 @@ namespace AppCoreGui{
         glUniform4f(glGetUniformLocation(default_shader.getID(),"color"),color.x,color.y,color.z,1.0f);
         default_shader.setFloat("use_vertex_colors",(show_vertex_colors?1.0f:0.0f));
         default_shader.setFloat("use_texture",(show_shaded? show_vertex_colors?0.5:1.0f :0.0f));
-        //Set Transform
+        //Set Transform (Model Matrix)
         default_shader.setMat4("transform",getRootComponent().getLocalTransformMatrix());
+        //std::cout<<getRootComponent().getPosition()<<std::endl;
+        //TODO: Need to setup View matrix propagation and inheritance
+        
+        //Mat4f view_matrix(1.0f);
+        //view_matrix = glm::translate(view_matrix,Vec3f(0.0f,0.0f,-3.0f));
+        //default_shader.setMat4("view",view_matrix);
+
+        if(!active_view){
+            active_view = Camera::getGlobalView();
+        }
+        default_shader.setMat4("view",*active_view);
+
+        //TODO: Need to setup Projection Matrix propagation and inheritance
+        Mat4f projection_matrix(1.0f);
+        projection_matrix = glm::perspective(glm::radians(45.0f),1024.0f/1024.0f,0.1f,100.0f);
+        default_shader.setMat4("projection",projection_matrix);
         
         glBindVertexArray(VAOs[0]);
         glPolygonMode(GL_FRONT_AND_BACK,(wireframe?GL_LINE:GL_FILL));

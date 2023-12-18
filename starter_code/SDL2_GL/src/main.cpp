@@ -21,6 +21,8 @@
 
 #include "util.hpp"
 
+#include "Alias.hpp"
+
 #define Debug(x){\
             std::cout<<x<<std::endl;\
         }
@@ -119,11 +121,14 @@ int main(int argc, char** argv)
     int last_texture = 0;
 
     float time_value = 0.0f;
-    float green_value = 0.0f;
+    float green_value = 0.0f;    
 
     AppCoreGui::RectangleShape r(1,1);
     r.create();
     r.setFillColor("../../resources/Textures/container.jpg");
+    r.getRootComponent().rotate(AppCoreGui::Vec3f(-55.0f,0.0f,0.0f));
+
+    AppCoreGui::Camera::getGlobalView().setTarget(r.getRootComponent().getPosition());
 
     std::cout<<"Rect Pos: "<<r.getRootComponent().getPosition()<<std::endl;
 
@@ -133,9 +138,9 @@ int main(int argc, char** argv)
             if(window_event.type == SDL_QUIT)break;
             if(window_event.type == SDL_KEYUP){
                 if(window_event.key.keysym.sym == SDLK_ESCAPE)break;
-                if(window_event.key.keysym.sym == SDLK_w)wireframe = !wireframe;
+                if(window_event.key.keysym.sym == SDLK_2)wireframe = !wireframe;
                 if(window_event.key.keysym.sym == SDLK_c)show_vertex_colors = !show_vertex_colors;
-                if(window_event.key.keysym.sym == SDLK_s)show_shaded = !show_shaded;
+                if(window_event.key.keysym.sym == SDLK_3)show_shaded = !show_shaded;
                 if(window_event.key.keysym.sym == SDLK_t)swap_texture++;
                 if(window_event.key.keysym.sym == SDLK_r){
                     rotation_axis = AppCoreGui::Vec3f(0,0,0);
@@ -150,6 +155,42 @@ int main(int argc, char** argv)
                 if(window_event.key.keysym.sym == SDLK_x)rotation_axis = AppCoreGui::Vec3f(glm::radians(5.0f),0,0);
                 if(window_event.key.keysym.sym == SDLK_y)rotation_axis = AppCoreGui::Vec3f(0,glm::radians(5.0f),0);
                 if(window_event.key.keysym.sym == SDLK_z)rotation_axis = AppCoreGui::Vec3f(0,0,glm::radians(5.0f));
+                if(window_event.key.keysym.sym == SDLK_q){
+                    //AppCoreGui::global_view.transform.translate(AppCoreGui::Vec3f(0.0f,3.0f,0.0f));
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(AppCoreGui::Vec3f(0.0f,1.0f,0.0f));
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                    //AppCoreGui::global_view.recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_e){
+                    //AppCoreGui::global_view.transform.translate(AppCoreGui::Vec3f(0.0f,-3.0f,0.0f));
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(AppCoreGui::Vec3f(0.0f,-1.0f,0.0f));
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                    //AppCoreGui::global_view.recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_w){
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(0.0f,0.0f,1.0f);
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_s){
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(0.0f,0.0f,-1.0f);
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_a){
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(-1.0f,0.0f,0.0f);
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_d){
+                    AppCoreGui::Camera::getGlobalView().getRootComponent().translate(1.0f,0.0f,1.0f);
+                    AppCoreGui::Camera::getGlobalView().recalculate();
+                }
+                if(window_event.key.keysym.sym == SDLK_l){
+                    if(AppCoreGui::Camera::getGlobalView().hasTarget()){
+                        AppCoreGui::Camera::getGlobalView().clearTarget();
+                    }
+                    else{
+                        AppCoreGui::Camera::getGlobalView().setTarget(r.getRootComponent().getPosition());
+                    }
+                }
             }
             if(window_event.type == SDL_WINDOWEVENT){
                 if(window_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
