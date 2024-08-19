@@ -33,11 +33,11 @@ bool AppCoreMT::addWorker()
     return true;
 }
 
-bool AppCoreMT::addWorker(std::string name, bool allow_task_exceptions, int task_priority_filter)
+bool AppCoreMT::addWorker(std::string name, bool immortal, bool allow_task_exceptions, int task_priority_filter)
 {
     if(max_worker_limit>0 && workers.size()>= max_worker_limit)return false;
     WorkerObject::Ptr w = std::make_shared<WorkerObject>();
-    w->worker = std::make_shared<AppWorker>(name);
+    w->worker = std::make_shared<AppWorker>(name,immortal);
     w->allow_task_exceptions = allow_task_exceptions;
     w->task_priority_filter = task_priority_filter;
     workers.emplace_back(w);
@@ -47,7 +47,10 @@ bool AppCoreMT::addWorker(std::string name, bool allow_task_exceptions, int task
 bool AppCoreMT::endWorker(int index)
 {
     if(index<0 || index>workers.size())return false;
-    if(workers[index]->worker)workers[index]->worker->stop();
+    if(workers[index]->worker){
+        if(workers[index]->worker)
+        workers[index]->worker->stop();
+    }
     return true;
 }
 

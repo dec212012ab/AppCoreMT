@@ -15,7 +15,7 @@ endif()
 #AppCoreMT
 configure_file(src/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/Version.hpp)
 
-file(GLOB CORE "./src/*.cpp" "./src/*.hpp" "./src/interfaces/*")
+file(GLOB CORE "./src/*.cpp" "./src/*.hpp" "./src/interfaces/*.hpp" )
 
 add_library(objlib OBJECT ${CORE})
 set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)

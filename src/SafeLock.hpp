@@ -43,17 +43,17 @@ private:
 
 class ScopedLock{
 public:
-	ScopedLock(ILockable& lock):lock_ref(lock)
+	ScopedLock(ILockable& lock):lock_ref(&lock)
 	{
-		lock_ref.lock();
+		lock_ref->lock();
 	}
 	~ScopedLock()
 	{
-		lock_ref.unlock();
+		lock_ref->unlock();
 	}
-	bool isLocked(){return lock_ref.isLocked();};
+	bool isLocked(){return lock_ref->isLocked();};
 private:
-	ILockable& lock_ref = SafeLock();
+	ILockable* lock_ref;// = SafeLock();
 };
 
 }

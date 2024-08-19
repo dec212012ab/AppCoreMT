@@ -3,6 +3,8 @@
 
 #include "SafeLock.hpp"
 
+#include <vector>
+
 namespace AppCore{
 
 template<typename T>

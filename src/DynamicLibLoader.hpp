@@ -1,5 +1,5 @@
-#ifndef __SHARED_LIB_LOADER_H__
-#define __SHARED_LIB_LOADER_H__
+#ifndef __DYNAMIC_LIB_LOADER_H__
+#define __DYNAMIC_LIB_LOADER_H__
 
 #include <iostream>
 #include <memory>

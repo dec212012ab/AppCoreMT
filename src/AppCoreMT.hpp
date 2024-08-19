@@ -71,13 +71,14 @@ public:
      * @brief Adds a new worker to the worker pool with the provided configuration.
      * 
      * @param name : The name of the worker
+     * @param immortal: If true the worker cannot be stopped dynamically.
      * @param allow_task_exceptions : If false, exceptions triggered by a running task
      * will be handled internally instead of crashing the worker or possibly the program.
      * @param task_priority_filter : [WIP] Sets the task priority filter value for the worker.
      * @return true if the worker was added to the pool
      * @return false if the worker limit has been reached
      */
-    bool addWorker(std::string name,bool allow_task_exceptions=true,int task_priority_filter=-1);
+    bool addWorker(std::string name,bool immortal=false,bool allow_task_exceptions=true,int task_priority_filter=-1);
 
     /**
      * @brief Stops the worker found with at the specified index in the worker pool.
@@ -93,7 +94,7 @@ public:
      * 
      * @param name : Name of the worker to stop in the pool (if found)
      * @return true if the worker has been stopped successfully
-     * @return false if a worker with the provided name could not be found in the pool
+     * @return false if a worker with the provided name could not be found in the pool or if the worker is immortal
      */
     bool endWorker(std::string name);
 
