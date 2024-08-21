@@ -115,7 +115,7 @@ public:
 
 	template<typename T>
 	bool safeAddSharedResource(std::string thread_id, std::string variable_name, T&& val, bool overwrite=false, size_t timeout_ms=-1){
-		if(timeout<0)variable_store.lock();
+		if(timeout_ms<0)variable_store.lock();
 		else if(!variable_store.tryLock(timeout_ms))return false;
 		bool ret = addSharedResource(thread_id,variable_name,val,overwrite);
 		variable_store.unlock();

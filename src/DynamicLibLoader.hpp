@@ -31,7 +31,7 @@ public:
         if(!shared_obj->isInitialized()){
             if(!shared_obj->openModule(module_name))return nullptr;
         }
-        SharedObject::Ptr _shared = shared_obj;
+        typename SharedObject::Ptr _shared = shared_obj;
         return std::shared_ptr<T>(shared_obj->create(args...),[_shared](T* p){_shared->destroy(p);});
     };
 
