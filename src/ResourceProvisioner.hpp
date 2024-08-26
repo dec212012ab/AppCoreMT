@@ -114,7 +114,7 @@ public:
 	static ResourceProvisioner::Ptr create(){return std::make_shared<ResourceProvisioner>();};
 
 	template<typename T>
-	bool safeAddSharedResource(std::string thread_id, std::string variable_name, T&& val, bool overwrite=false, size_t timeout_ms=-1){
+	bool safeAddSharedResource(std::string thread_id, std::string variable_name, T&& val, bool overwrite=false, int timeout_ms=-1){
 		if(timeout_ms<0)variable_store.lock();
 		else if(!variable_store.tryLock(timeout_ms))return false;
 		bool ret = addSharedResource(thread_id,variable_name,val,overwrite);
